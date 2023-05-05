@@ -13,6 +13,14 @@ This project is designed to provide an AI surveillance system that uses face rec
 6. Run `surveillance2.py` using Python: "python surveillance2.py"
 
 
+## To Update
+1. create a new branch "git branch 'yourname'"
+2. do "git checkout 'yourname'"
+3. do your update and run
+4. when done do "do git add ." & "git commit -m 'your update details'"
+5. do "git push"
+
+
 ## Usage
 The system can be used for security and surveillance purposes, such as monitoring entrances or exits of a building or a specific area. The system can be customized to fit specific needs by modifying the parameters in the `.env` file.
 
