@@ -5,7 +5,7 @@ This project is designed to provide an AI surveillance system that uses face rec
 
 ## Getting Started
 1. Install the required packages listed in `requirements.txt` using pip:
-2. Add authorized individuals' images to the `guestlist` folder.
+2. Add authorized individuals' images to the `guest_list` folder.
 3.copy the .env_example and rename it to .env .
 4. Add the required information to the `.env` file (e.g., Telegram bot API key, camera information, etc.).
 5. Run `main.py` using Python 3:
@@ -19,3 +19,4 @@ This project was developed by [Your Name] as part of [Your Organization]'s proje
 
 ## License
 This project is licensed under the [License Name] license.
+# ai-surveillance
