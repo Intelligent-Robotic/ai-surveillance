@@ -1,0 +1,10 @@
+# ignore .env file
+.env
+
+# ignore virtual environment directory
+venv/
+guest_list/*
+detected_list/*
+data.csv
+aliff.jpg
+
