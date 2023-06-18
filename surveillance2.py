@@ -7,9 +7,10 @@ import logger
 import os
 
 
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture('http://192.168.192.55:5000/video_feed')
 
 folder_path = "./guest_list"
+
 
 # Check if the folder is empty
 if len(os.listdir(folder_path)) == 0:
@@ -72,11 +73,16 @@ while True:
             if not any(matches):
                 if not notifier_triggered:
                     
-                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-                    cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+                    for (top, right, bottom, left), name in zip(face_locations, face_names):
+                        top *= 4
+                        right *= 4
+                        bottom *= 4
+                        left *= 4
+                        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
 
-                    cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-                    # Convert the image to JPEG format in memory
+                        font = cv2.FONT_HERSHEY_DUPLEX
+                        cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)                        # Convert the image to JPEG format in memory
                     _, jpeg_img = cv2.imencode('.jpg', frame)
 
                     # Convert the JPEG image bytes to a byte stream
@@ -87,10 +93,6 @@ while True:
                     logger.log_data('data.csv', {'type':'alert','info':'unidentified person detected'})
                     notifier_triggered = True
                
-                 
-                  
-                
-
     process_this_frame = not process_this_frame
 
 
