@@ -7,7 +7,7 @@ import logger
 import os
 
 
-video_capture = cv2.VideoCapture('http://192.168.192.55:5000/video_feed')
+video_capture = cv2.VideoCapture('http://192.168.100.30:5000/video_feed')
 
 folder_path = "./guest_list"
 
