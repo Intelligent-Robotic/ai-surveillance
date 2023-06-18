@@ -8,7 +8,8 @@ import os
 import requests
 
 
-url = 'http://192.168.100.30:5000/video_feed'
+url = os.getenv("VIDEO_URL")
+
 
 folder_path = "./guest_list"
 

@@ -73,6 +73,7 @@ def save_image(image):
     return filename
 
 def trigger_alarm(update,context):
+    respond = requests.get(os.getenv("ACTION_URL") + "/sound_alarm")
     print('alarm triggered')
 
 def notify_police(update,context):
