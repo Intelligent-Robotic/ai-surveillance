@@ -10,6 +10,8 @@ import uuid
 import io
 from PIL import Image
 import shutil
+import threading
+
 
 
 
@@ -17,7 +19,7 @@ import shutil
 
 from config import HISticker, songList
 
-PORT = int(os.environ.get('PORT', 5000))
+PORT = int(os.environ.get('PORT', 8080))
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
@@ -109,14 +111,15 @@ def main():
     # updater.start_webhook(listen="0.0.0.0",
     #                       port=int(PORT),
     #                       url_path=TOKEN,
-    #                       webhook_url='https://fathomless-taiga-61724.herokuapp.com/' + TOKEN)
+    #                       webhook_url='http://192.168.0.133' + TOKEN)
     updater.start_polling()
     updater.idle()
     
 
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+thread = threading.Thread(target=main)
+thread.start()
 
 
