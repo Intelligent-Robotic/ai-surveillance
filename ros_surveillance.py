@@ -6,6 +6,8 @@ import io
 import logger
 import os
 import requests
+from notifier import message_queue
+
 
 
 url = os.getenv("VIDEO_URL")
@@ -54,7 +56,25 @@ while True:
             jpg = stream_bytes[a:b+2]
             stream_bytes = stream_bytes[b+2:]
             frame = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
-           
+            if not message_queue.empty():
+                message = message_queue.get()
+                if message == 'guest_list_update':
+                    known_face_encodings = []
+                    known_face_names = []
+
+                    # Loop through the images in the folder
+                    for filename in os.listdir(folder_path):
+                        # Load the image and extract the face encoding
+                        image_path = os.path.join(folder_path, filename)
+                        image = face_recognition.load_image_file(image_path)
+                        face_encoding = face_recognition.face_encodings(image)[0]
+
+                        # Extract the label from the folder name
+                        label = os.path.splitext(filename)[0]
+
+                        # Add the face encoding and name to the arrays
+                        known_face_encodings.append(face_encoding)
+                        known_face_names.append(label)
 
             # Only process every other frame of video to save time
             if process_this_frame:

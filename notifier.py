@@ -11,13 +11,13 @@ import io
 from PIL import Image
 import shutil
 import threading
-
-
-
-
-
-
+import requests
 from config import HISticker, songList
+from queue import Queue
+
+
+message_queue = Queue()
+
 
 PORT = int(os.environ.get('PORT', 8080))
 logging.basicConfig(level=logging.DEBUG,
@@ -35,20 +35,21 @@ def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Reporting to duty sir.All system in check and fully operational')
 
 def alert(image):
-    # filename=save_image(image)
-    # print(filename)
+    filename=save_image(image)
+    image_path="./detected_list/"+filename
     keyboard = [
     [
         InlineKeyboardButton("Trigger Alarm", callback_data="1"),
         InlineKeyboardButton("Notified Police", callback_data="2"),
-        # InlineKeyboardButton("Add to Guest",callback_data=f"3 #{filename}"),
+        InlineKeyboardButton("Add to Guest",callback_data=f"3 #{filename}"),
 
     ],
     [InlineKeyboardButton("Destroy Target", callback_data="4")],
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    bot.send_photo(chat_id=chat_id, photo=image,caption="<b>Alert :</b> \nUnidentified person detected", reply_markup=reply_markup,parse_mode="HTML")
+
+    bot.send_photo(chat_id=chat_id, photo=open(image_path, 'rb'),caption="<b>Alert :</b> \nUnidentified person detected", reply_markup=reply_markup,parse_mode="HTML")
 
 
 def save_image(image):
@@ -67,10 +68,10 @@ def save_image(image):
         file_path = os.path.join(folder_path, filename)
 
     # Create the image from the BytesIO object
-    image = Image.open(image)
+    image2 = Image.open(image)
 
     # Save the image to the file path
-    image.save(file_path)
+    image2.save(file_path)
     print(filename)
     return filename
 
@@ -95,6 +96,8 @@ def add_to_guest(update,context):
 
     # Move the photo from the source folder to the destination folder
     shutil.move(src_path, dst_path)
+    message_queue.put('guest_list_update')
+
    
 
   
@@ -105,6 +108,8 @@ def main():
     updater = Updater(TOKEN)
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CallbackQueryHandler(trigger_alarm, pattern='1'))
+    updater.dispatcher.add_handler(CallbackQueryHandler(add_to_guest, pattern='3'))
+
 
 
 
