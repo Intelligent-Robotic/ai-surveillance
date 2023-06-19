@@ -14,17 +14,19 @@ import threading
 import requests
 from config import HISticker, songList
 from queue import Queue
+import datetime
+
 
 
 message_queue = Queue()
 
 
-PORT = int(os.environ.get('PORT', 8080))
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG)
+# PORT = int(os.environ.get('PORT', 8080))
+# logging.basicConfig(level=logging.DEBUG,
+#                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# logger = logging.getLogger()
+# logger.setLevel(logging.INFO)
+# logger.setLevel(logging.DEBUG)
 load_dotenv()
 TOKEN=os.getenv("TOKEN")
 chat_id=os.getenv("CHAT_ID")
@@ -79,8 +81,24 @@ def trigger_alarm(update,context):
     respond = requests.get(os.getenv("ACTION_URL") + "/sound_alarm")
     print('alarm triggered')
 
+def send_recording(text):
+    bot.send_message(chat_id=chat_id, text=f"<b>Recording Transcribe</b>\n\n{text}", parse_mode="HTML")
+    print(text)
+
 def notify_police(update,context):
+    bot.send_message(chat_id=chat_id, text=f"<b>Police has been notified</b>\nTime : {str(datetime.datetime.now())}", parse_mode="HTML")
     print('police notified')
+
+
+def speak(update,context):
+    text_args = ' '.join(context.args)
+    params = {
+    'text': text_args,
+    }
+    respond = requests.get(os.getenv("ACTION_URL") + "/speak",params=params)
+    print(text_args)
+
+
 
 def add_to_guest(update,context):
     update.callback_query.answer()
@@ -109,6 +127,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CallbackQueryHandler(trigger_alarm, pattern='1'))
     updater.dispatcher.add_handler(CallbackQueryHandler(add_to_guest, pattern='3'))
+    updater.dispatcher.add_handler(CommandHandler('speak', speak, pass_args=True))
 
 
 

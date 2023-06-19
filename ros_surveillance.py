@@ -7,6 +7,7 @@ import logger
 import os
 import requests
 from notifier import message_queue
+import message_recorder
 
 
 

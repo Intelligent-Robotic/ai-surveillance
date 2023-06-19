@@ -5,8 +5,8 @@ import notifier
 import io
 import logger
 import os
-import threading
 from notifier import message_queue
+import message_recorder
 
 video_capture = cv2.VideoCapture(0)
 
