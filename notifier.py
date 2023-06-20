@@ -21,7 +21,7 @@ import datetime
 message_queue = Queue()
 
 
-# PORT = int(os.environ.get('PORT', 8080))
+PORT = int(os.environ.get('PORT', 8080))
 # logging.basicConfig(level=logging.DEBUG,
 #                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 # logger = logging.getLogger()
@@ -91,6 +91,7 @@ def notify_police(update,context):
 
 
 def speak(update,context):
+    print("hello")
     text_args = ' '.join(context.args)
     params = {
     'text': text_args,
